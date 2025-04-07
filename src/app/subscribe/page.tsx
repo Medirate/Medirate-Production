@@ -622,19 +622,6 @@ const StripePricingTableWithFooter = () => {
                   required
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Would you like to set up a demo to learn more about MediRate?</label>
-                <select
-                  name="demoRequest"
-                  value={formData.demoRequest}
-                  onChange={handleFormChange}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#012C61] transition-all"
-                  required
-                >
-                  <option value="No">No</option>
-                  <option value="Yes">Yes</option>
-                </select>
-              </div>
               <div className="flex justify-end">
                 <button
                   type="submit"
