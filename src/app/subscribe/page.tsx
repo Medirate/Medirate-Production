@@ -216,33 +216,119 @@ const StripePricingTableWithFooter = () => {
     return null; // or a loading spinner
   }
 
-  // If the user has an active subscription or is a sub-user, show the "Already Subscribed" card
+  // If the user has an active subscription or is a sub-user, show the "Already Subscribed" message
   if (hasActiveSubscription || isSubUser) {
     return (
       <div className="flex flex-col min-h-screen">
         <main className="flex-grow flex flex-col items-center justify-center px-4 pt-16">
+          {/* Already Subscribed Message */}
           <div className="w-full max-w-4xl mb-8 p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
             <h2 className="text-3xl font-bold mb-6 text-[#012C61] text-center font-lemonMilkRegular">
               You Are Already Subscribed
             </h2>
             <p className="text-lg mb-10 text-gray-600 text-center">
-              Thank you for being a valued MediRate subscriber. You can access all features of your subscription from your dashboard.
+              Thank you for being a valued MediRate subscriber. Below are the subscription details for your reference.
             </p>
             {isSubUser && (
               <p className="text-lg mb-10 text-gray-600 text-center">
                 This is a sub-user account.
               </p>
             )}
-            <div className="flex justify-center">
-              <a
-                href="/dashboard"
-                className="bg-[#012C61] text-white px-8 py-3 rounded-lg transition-all duration-300 hover:bg-transparent hover:border hover:border-[#012C61] hover:text-[#012C61]"
-              >
-                Go to Dashboard
-              </a>
+          </div>
+
+          {/* Subscription Details */}
+          <div className="w-full max-w-4xl mb-8 p-8 bg-white rounded-xl shadow-2xl border border-gray-100">
+            <h2 className="text-3xl font-bold mb-6 text-[#012C61] text-center font-lemonMilkRegular">Subscription Models</h2>
+            <p className="text-lg mb-10 text-gray-600 text-center">
+              MediRate offers flexible subscription models designed to meet your company's needs:
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Annual Subscription Card */}
+              <div className="p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-lg border border-gray-100 transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                <h3 className="text-2xl font-bold mb-6 text-[#012C61] font-lemonMilkRegular">Annual Subscription</h3>
+                <ul className="space-y-4">
+                  <li className="flex items-center">
+                    <span className="text-green-600 mr-3">✔</span>
+                    <span className="text-gray-700">Three user accounts included</span>
+                  </li>
+                  <li className="flex items-center">
+                    <span className="text-green-600 mr-3">✔</span>
+                    <span className="text-gray-700">Ability to add up to ten users on one subscription <span className="text-sm text-gray-500">(In Development)</span></span>
+                  </li>
+                  <li className="flex items-center">
+                    <span className="text-green-600 mr-3">✔</span>
+                    <span className="text-gray-700">Access to MediRate's comprehensive reimbursement rate database and tracking tools</span>
+                  </li>
+                  <li className="flex items-center">
+                    <span className="text-green-600 mr-3">✔</span>
+                    <span className="text-gray-700">Customizable email alerts for real-time updates on topics and states of your choice <span className="text-sm text-gray-500">(In Development)</span></span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* 3-Month Subscription Card */}
+              <div className="p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-lg border border-gray-100 transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                <h3 className="text-2xl font-bold mb-6 text-[#012C61] font-lemonMilkRegular">3-Month Subscription</h3>
+                <ul className="space-y-4">
+                  <li className="flex items-center">
+                    <span className="text-green-600 mr-3">✔</span>
+                    <span className="text-gray-700">Designed for users with short-term, project-based needs</span>
+                  </li>
+                  <li className="flex items-center">
+                    <span className="text-green-600 mr-3">✔</span>
+                    <span className="text-gray-700">Two user accounts included</span>
+                  </li>
+                  <li className="flex items-center">
+                    <span className="text-green-600 mr-3">✔</span>
+                    <span className="text-gray-700">Access to MediRate's comprehensive reimbursement rate database and tracking tools</span>
+                  </li>
+                  <li className="flex items-center">
+                    <span className="text-green-600 mr-3">✔</span>
+                    <span className="text-gray-700">Customizable email alerts for real-time updates on topics and states of your choice <span className="text-sm text-gray-500">(In Development)</span></span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
+
+          {/* Professional Discount Banner */}
+          {/* <div className="w-full max-w-4xl mb-8 p-6 bg-gradient-to-r from-blue-700 to-indigo-700 rounded-lg shadow-lg text-white text-center animate-pulse">
+            <h2 className="text-2xl font-bold mb-2">✨ Limited Time Offer ✨</h2>
+            <p className="text-lg mb-4">
+              Use code <span className="font-bold bg-white text-blue-700 px-2 py-1 rounded">MEDICAID20</span> at checkout to get <span className="font-bold">20% off</span> your annual subscription!
+            </p>
+          </div> */}
+
+          {/* Pricing Table */}
+          <div id="pricing-table" className="w-full max-w-4xl transform scale-110" style={{ transformOrigin: "center" }}>
+            {React.createElement("stripe-pricing-table", {
+              "pricing-table-id": "prctbl_1RBMKo2NeWrBDfGslMwYkTKz",
+              "publishable-key": "pk_live_51QXT6G2NeWrBDfGsjthMPwaWhPV7UIzSJjZ3fpmANYKT58UCVSnoHaHKyozK9EptYNbV3Y1y5SX1QQcuI9dK5pZW00VQH9T3Hh"
+            })}
+          </div>
+
+          {/* Accepted Payment Methods */}
+          <div className="mt-6 p-4 bg-gray-100 rounded-lg shadow-md flex items-center space-x-2">
+            <span className="text-lg font-semibold">Accepted Payment Methods:</span>
+            <CreditCard className="w-6 h-6 text-blue-600" />
+            <span className="text-lg">Card</span>
+          </div>
+
+          {/* Terms and Conditions Link */}
+          <div className="mt-6 text-center">
+            <button onClick={toggleModalVisibility} className="text-blue-600 underline">
+              Terms and Conditions
+            </button>
+          </div>
         </main>
+
+        {/* Subscription Terms and Conditions Modal */}
+        <SubscriptionTermsModal 
+          isOpen={showTerms} 
+          onClose={() => setShowTerms(false)} 
+        />
+
+        {/* Footer */}
         <Footer />
       </div>
     );
@@ -309,19 +395,18 @@ const StripePricingTableWithFooter = () => {
           </div>
 
           {/* Professional Discount Banner */}
-          <div className="w-full max-w-4xl mb-8 p-6 bg-gradient-to-r from-blue-700 to-indigo-700 rounded-lg shadow-lg text-white text-center animate-pulse">
+          {/* <div className="w-full max-w-4xl mb-8 p-6 bg-gradient-to-r from-blue-700 to-indigo-700 rounded-lg shadow-lg text-white text-center animate-pulse">
             <h2 className="text-2xl font-bold mb-2">✨ Limited Time Offer ✨</h2>
             <p className="text-lg mb-4">
               Use code <span className="font-bold bg-white text-blue-700 px-2 py-1 rounded">MEDICAID20</span> at checkout to get <span className="font-bold">20% off</span> your annual subscription!
             </p>
-          </div>
+          </div> */}
 
           {/* Pricing Table */}
           <div id="pricing-table" className="w-full max-w-4xl transform scale-110" style={{ transformOrigin: "center" }}>
             {React.createElement("stripe-pricing-table", {
-              "pricing-table-id": "prctbl_1QhgA9EA5fbmDyeFHEeLwdrJ", // Replace with actual Pricing Table ID
-              "publishable-key":
-                "pk_test_51QhZ80EA5fbmDyeFadp5z5QeaxeFyaUhRpS4nq3rXQh6Zap8nsAKw5D3lalc3ewBtBpecpBzeULgZx7H1jxragFs00IAS0L60o", // Replace with actual Publishable Key
+              "pricing-table-id": "prctbl_1RBMKo2NeWrBDfGslMwYkTKz",
+              "publishable-key": "pk_live_51QXT6G2NeWrBDfGsjthMPwaWhPV7UIzSJjZ3fpmANYKT58UCVSnoHaHKyozK9EptYNbV3Y1y5SX1QQcuI9dK5pZW00VQH9T3Hh"
             })}
           </div>
 
