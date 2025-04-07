@@ -956,13 +956,7 @@ export default function StatePaymentComparison() {
                     <label className="text-sm font-medium text-gray-700">Service Line</label>
                     <Select
                       instanceId={`service-category-select-${index}`}
-                      options={serviceCategories
-                        .filter(category => {
-                          const trimmedCategory = category.trim();
-                          return trimmedCategory && 
-                                 !['HCBS', 'IDD', 'SERVICE CATEGORY'].includes(trimmedCategory);
-                        })
-                        .map(category => ({ value: category, label: category }))}
+                      options={[{ value: "APPLIED BEHAVIOR ANALYSIS (ABA)", label: "APPLIED BEHAVIOR ANALYSIS (ABA)" }]}
                       value={filterSet.serviceCategory ? { value: filterSet.serviceCategory, label: filterSet.serviceCategory } : null}
                       onChange={(option) => handleServiceCategoryChange(index, option?.value || "")}
                       placeholder="Select Service Line"
