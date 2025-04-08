@@ -484,16 +484,25 @@ export default function Dashboard() {
     setSelectedModifier("");
     setFilterStep(2);
 
+    // Log the data for debugging
+    console.log('Data:', data);
+
     // Filter data based on selected category (case-insensitive)
     const filteredData = data.filter(item => 
-      item.service_category?.toUpperCase() === "APPLIED BEHAVIORAL ANALYSIS (ABA)"
+      item.service_category && item.service_category.toUpperCase() === category.toUpperCase()
     );
+
+    // Log the filtered data for debugging
+    console.log('Filtered Data:', filteredData);
     
     // Update all filter options based on filtered data
     const uniqueStates = [...new Set(filteredData
-      .map(item => item.state_name?.toUpperCase())
+      .map(item => item.state_name ? item.state_name.toUpperCase() : '')
       .filter((state): state is string => !!state)
     )].sort((a, b) => a.localeCompare(b));
+
+    // Log the unique states for debugging
+    console.log('Unique States:', uniqueStates);
 
     setStates(uniqueStates); // Update the states dropdown
     setServiceCodes([]);
