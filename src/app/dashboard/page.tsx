@@ -488,10 +488,12 @@ export default function Dashboard() {
     const filteredData = data.filter(item => item.service_category === category);
     
     // Update all filter options based on filtered data
-    setStates([...new Set(filteredData
+    const uniqueStates = [...new Set(filteredData
       .map(item => item.state_name?.toUpperCase())
       .filter((state): state is string => !!state)
-    )].sort((a, b) => a.localeCompare(b)));
+    )].sort((a, b) => a.localeCompare(b));
+
+    setStates(uniqueStates); // Update the states dropdown
     setServiceCodes([]);
     setServiceDescriptions([]);
     setPrograms([]);
