@@ -114,6 +114,14 @@ export default function SubscriptionPage() {
     fetchSubUsers();
   }, [userEmail]);
 
+  useEffect(() => {
+    if (subscription) {
+      const slots = getSlotsForPlan(subscription.plan);
+      setSlots(slots);
+      console.log("Slots for plan:", slots);
+    }
+  }, [subscription]);
+
   const getRemainingDays = () => {
     if (!subscription) return 0;
     const endDate = new Date(subscription.endDate);
@@ -226,9 +234,9 @@ export default function SubscriptionPage() {
 
   const getSlotsForPlan = (plan: string) => {
     if (plan === "Medirate Annual") {
-      return 9; // Annual users get 9 slots
+      return 9; // Annual users get 9 slots (excluding the main account)
     } else if (plan === "MediRate 3 Months") {
-      return 1; // 3-month users get 1 slot (main slot)
+      return 1; // 3-month users get 1 slot (excluding the main account)
     }
     return 0; // Default to 0 slots for all other plans
   };
@@ -344,10 +352,10 @@ export default function SubscriptionPage() {
                 </div>
 
                 {/* Slots Section */}
-                {!isSubUser && slots > 0 && (
+                {!isSubUser && subscription && (
                   <div id="slots-section" className="mt-8">
                     <h3 className="text-xl font-semibold text-gray-900 mb-4">Available Slots</h3>
-                    {[...Array(slots)].map((_, index) => (
+                    {[...Array(getSlotsForPlan(subscription.plan))].map((_, index) => (
                       <div
                         key={index}
                         className={`mt-4 p-4 rounded-lg border ${
