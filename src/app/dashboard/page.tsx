@@ -484,8 +484,10 @@ export default function Dashboard() {
     setSelectedModifier("");
     setFilterStep(2);
 
-    // Filter data based on selected category
-    const filteredData = data.filter(item => item.service_category === category);
+    // Filter data based on selected category (case-insensitive)
+    const filteredData = data.filter(item => 
+      item.service_category?.toUpperCase() === "APPLIED BEHAVIORAL ANALYSIS (ABA)"
+    );
     
     // Update all filter options based on filtered data
     const uniqueStates = [...new Set(filteredData
@@ -776,6 +778,10 @@ export default function Dashboard() {
     const date = new Date(dateString);
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
   };
+
+  useEffect(() => {
+    console.log('Service Categories:', data.map(item => item.service_category));
+  }, [data]);
 
   return (
     <AppLayout activeTab="dashboard">
