@@ -60,11 +60,11 @@ const supabase = createClient(
 );
 
 export default function HistoricalRates() {
-  const { isAuthenticated, isLoading, user } = useKindeBrowserClient();
-  const router = useRouter();
   const { data, loading, error } = useData();
+  const router = useRouter();
+  const { user } = useKindeBrowserClient();
 
-  // Move all useState declarations to the top
+  // State hooks
   const [selectedServiceCategory, setSelectedServiceCategory] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedServiceCode, setSelectedServiceCode] = useState("");
@@ -175,12 +175,8 @@ export default function HistoricalRates() {
   }, [data]);
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push("/api/auth/login");
-    } else if (isAuthenticated) {
-      checkSubscriptionAndSubUser();
-    }
-  }, [isAuthenticated, isLoading, router]);
+    checkSubscriptionAndSubUser();
+  }, [router]);
 
   const checkSubscriptionAndSubUser = async () => {
     const userEmail = user?.email ?? "";
@@ -266,14 +262,6 @@ export default function HistoricalRates() {
       router.push("/subscribe");
     }
   };
-
-  if (isLoading || !isAuthenticated || !isSubscriptionCheckComplete) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <FaSpinner className="animate-spin h-12 w-12 text-blue-500" />
-      </div>
-    );
-  }
 
   if (loading) {
     return <div>Loading...</div>;
@@ -483,7 +471,7 @@ export default function HistoricalRates() {
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Service Line</label>
                   <Select
-                    options={[{ value: "APPLIED BEHAVIOR ANALYSIS (ABA)", label: "APPLIED BEHAVIOR ANALYSIS (ABA)" }]}
+                    options={[{ value: "APPLIED BEHAVIORAL ANALYSIS (ABA)", label: "APPLIED BEHAVIORAL ANALYSIS (ABA)" }]}
                     value={selectedServiceCategory ? { value: selectedServiceCategory, label: selectedServiceCategory } : null}
                     onChange={(option) => handleServiceCategoryChange(option?.value || "")}
                     placeholder="Select Service Line"

@@ -956,7 +956,7 @@ export default function StatePaymentComparison() {
                     <label className="text-sm font-medium text-gray-700">Service Line</label>
                     <Select
                       instanceId={`service-category-select-${index}`}
-                      options={[{ value: "APPLIED BEHAVIOR ANALYSIS (ABA)", label: "APPLIED BEHAVIOR ANALYSIS (ABA)" }]}
+                      options={[{ value: "APPLIED BEHAVIORAL ANALYSIS (ABA)", label: "APPLIED BEHAVIORAL ANALYSIS (ABA)" }]}
                       value={filterSet.serviceCategory ? { value: filterSet.serviceCategory, label: filterSet.serviceCategory } : null}
                       onChange={(option) => handleServiceCategoryChange(index, option?.value || "")}
                       placeholder="Select Service Line"
