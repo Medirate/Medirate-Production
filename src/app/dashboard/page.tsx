@@ -484,27 +484,14 @@ export default function Dashboard() {
     setSelectedModifier("");
     setFilterStep(2);
 
-    // Log the data for debugging
-    console.log('Data:', data);
-
-    // Filter data based on selected category (case-insensitive)
-    const filteredData = data.filter(item => 
-      item.service_category && item.service_category.toUpperCase() === category.toUpperCase()
-    );
-
-    // Log the filtered data for debugging
-    console.log('Filtered Data:', filteredData);
+    // Filter data based on selected category
+    const filteredData = data.filter(item => item.service_category === category);
     
     // Update all filter options based on filtered data
-    const uniqueStates = [...new Set(filteredData
-      .map(item => item.state_name ? item.state_name.toUpperCase() : '')
+    setStates([...new Set(filteredData
+      .map(item => item.state_name?.toUpperCase())
       .filter((state): state is string => !!state)
-    )].sort((a, b) => a.localeCompare(b));
-
-    // Log the unique states for debugging
-    console.log('Unique States:', uniqueStates);
-
-    setStates(uniqueStates); // Update the states dropdown
+    )].sort((a, b) => a.localeCompare(b)));
     setServiceCodes([]);
     setServiceDescriptions([]);
     setPrograms([]);
@@ -788,10 +775,6 @@ export default function Dashboard() {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
   };
 
-  useEffect(() => {
-    console.log('Service Categories:', data.map(item => item.service_category));
-  }, [data]);
-
   return (
     <AppLayout activeTab="dashboard">
       <CodeDefinitionsIcon />
@@ -949,7 +932,7 @@ export default function Dashboard() {
               <label className="text-sm font-medium text-gray-700">Service Line</label>
               <Select
                 instanceId={serviceCategoryId}
-                options={[{ value: "APPLIED BEHAVIOR ANALYSIS (ABA)", label: "APPLIED BEHAVIOR ANALYSIS (ABA)" }]}
+                options={[{ value: "APPLIED BEHAVIORAL ANALYSIS (ABA)", label: "APPLIED BEHAVIORAL ANALYSIS (ABA)" }]}
                 value={selectedServiceCategory ? { value: selectedServiceCategory, label: selectedServiceCategory } : null}
                 onChange={(option) => handleServiceCategoryChange(option?.value || "")}
                 placeholder="Select Service Line"
