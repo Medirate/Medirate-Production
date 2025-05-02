@@ -216,10 +216,15 @@ export default function Dashboard() {
   const [selectedFeeScheduleDate, setSelectedFeeScheduleDate] = useState("");
   const [feeScheduleDates, setFeeScheduleDates] = useState<string[]>([]);
 
+  // Add new state for provider type
+  const [selectedProviderType, setSelectedProviderType] = useState("");
+  const [providerTypes, setProviderTypes] = useState<string[]>([]);
+
   // Move the parseDate function here, before filteredData
   const parseDate = (dateString: string | null) => {
     if (!dateString) return null; // Skip null or undefined dates
 
+    // Check if the dateString is a valid serial date (numeric)
     if (!isNaN(Number(dateString))) {
       const serialDate = Number(dateString);
       const date = new Date(Date.UTC(1900, 0, serialDate - 1)); // Convert serial date to Date object
@@ -230,28 +235,36 @@ export default function Dashboard() {
       return date;
     }
 
+    // Check if the dateString is in the format "mm/dd/yyyy"
     const dateParts = dateString.split('/');
-    if (dateParts.length !== 3) {
-      console.error("Invalid date format:", dateString);
-      return null; // Skip invalid date formats
+    if (dateParts.length === 3) {
+      const month = parseInt(dateParts[0], 10) - 1; // Months are 0-based in JavaScript
+      const day = parseInt(dateParts[1], 10);
+      const year = parseInt(dateParts[2], 10);
+
+      if (isNaN(month) || isNaN(day) || isNaN(year)) {
+        console.error("Invalid date parts:", dateString);
+        return null; // Skip invalid date parts
+      }
+
+      const date = new Date(Date.UTC(year, month, day));
+      if (isNaN(date.getTime())) {
+        console.error("Invalid date:", dateString);
+        return null; // Skip invalid dates
+      }
+
+      return date;
     }
 
-    const month = parseInt(dateParts[0], 10) - 1; // Months are 0-based in JavaScript
-    const day = parseInt(dateParts[1], 10);
-    const year = parseInt(dateParts[2], 10);
-
-    if (isNaN(month) || isNaN(day) || isNaN(year)) {
-      console.error("Invalid date parts:", dateString);
-      return null; // Skip invalid date parts
+    // Check if the dateString is in ISO format (e.g., "2023-12-31")
+    const isoDate = new Date(dateString);
+    if (!isNaN(isoDate.getTime())) {
+      return isoDate;
     }
 
-    const date = new Date(Date.UTC(year, month, day));
-    if (isNaN(date.getTime())) {
-      console.error("Invalid date:", dateString);
-      return null; // Skip invalid dates
-    }
-
-    return date;
+    // Log an error for unrecognized date formats
+    console.error("Unrecognized date format:", dateString);
+    return null; // Skip unrecognized date formats
   };
 
   // Now the filteredData useMemo hook can safely use parseDate
@@ -259,7 +272,7 @@ export default function Dashboard() {
     if (!areFiltersApplied) return [];
     
     return data.filter(item => {
-                          const parsedDate = parseDate(item.rate_effective_date);
+      const parsedDate = parseDate(item.rate_effective_date);
       if (!parsedDate) return false; // Skip items with invalid dates
 
       if (selectedFeeScheduleDate) {
@@ -290,6 +303,8 @@ export default function Dashboard() {
         if (!hasModifier) return false;
       }
 
+      if (selectedProviderType && item.provider_type !== selectedProviderType) return false;
+
       return true;
     });
   }, [
@@ -303,7 +318,8 @@ export default function Dashboard() {
     selectedProgram,
     selectedLocationRegion,
     selectedModifier,
-    selectedFeeScheduleDate
+    selectedFeeScheduleDate,
+    selectedProviderType
   ]);
 
   // Update the sortConfig state initialization
@@ -465,6 +481,12 @@ export default function Dashboard() {
       .map((item) => item.state_name?.trim().toUpperCase())
       .filter((state): state is string => !!state);
     setStates([...new Set(states)].sort((a, b) => a.localeCompare(b)));
+
+    // Get provider types
+    const providerTypes = data
+      .map((item) => item.provider_type?.trim())
+      .filter((providerType): providerType is string => !!providerType);
+    setProviderTypes([...new Set(providerTypes)].sort((a, b) => a.localeCompare(b)));
   };
 
   const toggleDropdown = (dropdownSetter: React.Dispatch<React.SetStateAction<boolean>>, otherSetters: React.Dispatch<React.SetStateAction<boolean>>[]) => {
@@ -611,6 +633,7 @@ export default function Dashboard() {
     setLocationRegions([]);
     setModifiers([]);
     setFilterStep(1); // Reset to the first step
+    setSelectedProviderType("");
   };
 
   // Update the dropdown selection logic
@@ -1074,6 +1097,25 @@ export default function Dashboard() {
               />
               {selectedModifier && (
                 <ClearButton onClick={() => setSelectedModifier("")} />
+              )}
+            </div>
+
+            {/* Provider Type Selector */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Provider Type</label>
+              <Select
+                instanceId="providerTypeId"
+                options={providerTypes.map(type => ({ value: type, label: type }))}
+                value={selectedProviderType ? { value: selectedProviderType, label: selectedProviderType } : null}
+                onChange={(option) => setSelectedProviderType(option?.value || "")}
+                placeholder="Select Provider Type"
+                isSearchable
+                isDisabled={!selectedServiceCode && !selectedServiceDescription}
+                className={`react-select-container ${!selectedServiceCode && !selectedServiceDescription ? 'opacity-50' : ''}`}
+                classNamePrefix="react-select"
+              />
+              {selectedProviderType && (
+                <ClearButton onClick={() => setSelectedProviderType("")} />
               )}
             </div>
           </div>
